@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import json
-from functools import lru_cache
+from functools import lru_cache, partial
 from utils import slice_dict
 from openai import OpenAI
 
 
 PRICE_FILE = 'chat_models.json'
 PRICE_KEY = 'price_per_1k_input'
+DEFAUT_CONTEXT_WINDOW_MAX_SIZE = 2
 
 
 @lru_cache()
@@ -53,9 +54,25 @@ def pick_cheapest_supported_model(client: OpenAI, price_map: dict[str, float]) -
     return cheapest_id, cheapest_price
 
 
-def append_history(history, user_input, response) -> None:
+def append_history(history, user_input, response, max_size=DEFAUT_CONTEXT_WINDOW_MAX_SIZE) -> None:
     ai_output = response.output[0].content[0].text
     history.append({'user': user_input, 'ai': ai_output})
+    amount_of_pairs_to_be_cut_off = max(0, len(history) - max_size)
+    for _ in range(amount_of_pairs_to_be_cut_off):
+        history.pop(0)
+
+
+def send_next_input(client, model_id, history, next_input) -> None:
+    print(f'Sending {next_input=}')
+    user_input = ((str(history) + ' ') if history else '') + next_input
+    response = client.responses.create(
+        model=model_id,
+        input=user_input,
+    )
+    append_history(history, next_input, response)
+    print("Model output:")
+    print(response.output_text)
+    print('\n')
 
 
 def main() -> None:
@@ -68,37 +85,13 @@ def main() -> None:
     print(f"Using model: {model_id} (input: ${price} per 1K tokens)")
 
     history = []
-    user_input = 'Hello World'
-    print(f'Sending {user_input=}')
-    response = client.responses.create(
-        model=model_id,
-        input=user_input,
-    )
-    append_history(history, user_input, response)
-
-    print("Model output:")
-    print(response.output_text)
-
-    user_input = 'Please tell me a joke'
-    print(f'Sending {user_input=}')
-    response = client.responses.create(
-        model=model_id,
-        input=str(history) + user_input,
-    )
-    append_history(history, user_input, response)
-    print("Model output:")
-    print(response.output_text)
-
-    user_input = 'Why was the joke funny?'
-    print(f'Sending {user_input=}')
-    response = client.responses.create(
-        model=model_id,
-        input=str(history) + user_input,
-    )
-    #append_history(history, user_input, response)
-    print("Model output:")
-    print(response.output_text)
-
+    sender = partial(send_next_input, client, model_id, history)
+    sender('Hello World')                         # 1
+    sender('Please tell me a joke')               # 2
+    sender('Why was the joke funny?')             # 3 (1 is lost)
+    sender('What is the weather like')            # 4 (2 is lost)
+    sender('What is the time?')                   # 5 (3 is lost)
+    sender('What joke did you tell me before?')   # 6 (4 is lost)
 
 if __name__ == "__main__":
     main()
