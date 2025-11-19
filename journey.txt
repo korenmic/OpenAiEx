@@ -1,0 +1,9 @@
+1. Will need to talk to openai endpoint
+ - Fill billing details: https://platform.openai.com/settings/organization/billing/overview
+ - Generate api key: https://platform.openai.com/settings/organization/api-keys
+ - Generate hello world script (hello_world.py)
+  - Out of 3 possible endpoints, pick future proof endpoint https://api.openai.com/v1/responses
+  - Add requirements.txt
+  - Get list of supported models (it takes a lot of time
+  - Avoid exhausting billing by using cheapest model for the sake of this exercise https://openai.com/api/pricing/ (added chat_models.json)
+2. 
