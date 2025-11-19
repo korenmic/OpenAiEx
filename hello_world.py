@@ -53,8 +53,12 @@ def pick_cheapest_supported_model(client: OpenAI, price_map: dict[str, float]) -
     return cheapest_id, cheapest_price
 
 
+def append_history(history, user_input, response) -> None:
+    ai_output = response.output[0].content[0].text
+    history.append({'user': user_input, 'ai': ai_output})
+
+
 def main() -> None:
-    import pdb ; pdb.set_trace()
     # Assumes OPENAI_API_KEY is set in the environment
     client = OpenAI()
 
@@ -63,11 +67,35 @@ def main() -> None:
 
     print(f"Using model: {model_id} (input: ${price} per 1K tokens)")
 
+    history = []
+    user_input = 'Hello World'
+    print(f'Sending {user_input=}')
     response = client.responses.create(
         model=model_id,
-        input="Hello World",
+        input=user_input,
     )
+    append_history(history, user_input, response)
 
+    print("Model output:")
+    print(response.output_text)
+
+    user_input = 'Please tell me a joke'
+    print(f'Sending {user_input=}')
+    response = client.responses.create(
+        model=model_id,
+        input=str(history) + user_input,
+    )
+    append_history(history, user_input, response)
+    print("Model output:")
+    print(response.output_text)
+
+    user_input = 'Why was the joke funny?'
+    print(f'Sending {user_input=}')
+    response = client.responses.create(
+        model=model_id,
+        input=str(history) + user_input,
+    )
+    #append_history(history, user_input, response)
     print("Model output:")
     print(response.output_text)
 

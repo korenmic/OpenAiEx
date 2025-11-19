@@ -6,4 +6,5 @@
   - Add requirements.txt
   - Get list of supported models (it takes a lot of time
   - Avoid exhausting billing by using cheapest model for the sake of this exercise https://openai.com/api/pricing/ (added chat_models.json)
+  - Completing POC by adding concept of history (TODO slicing window to avoid exhuasting tokens too fast)
 2. 
