@@ -9,9 +9,9 @@ from fastapi import FastAPI, HTTPException
 from openai import OpenAI
 from utils.logging_config import configure_logging
 from utils.model_negotiator import pick_cheapest_supported_model
+from utils.schemas import ChatRequest, ChatResponse
 
 from app.consts import BLOCKED_MESSAGE
-from app.schemas import ChatRequest, ChatResponse
 from mongo.utils import get_mongo_base_url
 
 """
@@ -53,8 +53,8 @@ app = FastAPI()
 
 def _get_user_status(request_id, req) -> Optional[bool]:
     """
-    Best-effort check with the mongo service. For now, any failure or 404 means False
-    is logged but does not block the request.
+    Best-effort check with the mongo service.
+    is logged but does not block the request if user is missing.
     """
     mongo_base_url = get_mongo_base_url()
     if mongo_base_url is None:

@@ -3,9 +3,10 @@ import os
 
 import httpx
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+
 
 from utils.logging_config import configure_logging
+from utils.schemas import UserStatus
 
 """
 ASGI mongo server using FastAPI + Uvicorn.
@@ -23,17 +24,6 @@ configure_logging()
 logger = logging.getLogger("openai_ex.mongo")
 
 
-class UserStatus(BaseModel):
-    """Represents the status of a user as seen by the mongo service.
-
-    This will later be backed by a real MongoDB query.
-    For now it is a stub that always responds with 404 / not found.
-    """
-
-    username: str
-    blocked: bool = False
-
-
 app = FastAPI()
 
 
@@ -44,4 +34,4 @@ async def get_user_status(username: str) -> UserStatus:
     In a real deployment this would query MongoDB for the user record.
     For now, it always raises a 404 to simulate "no such user".
     """
-    pass
+    raise HTTPException(status_code=404, detail='User not found')

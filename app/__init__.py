@@ -1,1 +1,1 @@
-# App package for ASGI server and shared schemas.
+# App package for app ASGI server

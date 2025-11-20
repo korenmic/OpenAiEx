@@ -3,7 +3,7 @@ import os
 from fastapi.testclient import TestClient
 
 from app.server import app
-from app.schemas import ChatRequest, ChatResponse
+from utils.schemas import ChatRequest, ChatResponse
 
 
 client = TestClient(app)
