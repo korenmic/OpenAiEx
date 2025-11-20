@@ -1,4 +1,5 @@
-1. Will need to talk to openai endpoint
+1. POC
+ - Will need to talk to openai endpoint
  - Fill billing details: https://platform.openai.com/settings/organization/billing/overview
  - Generate api key: https://platform.openai.com/settings/organization/api-keys
  - Generate hello world script (hello_world.py)
@@ -7,4 +8,8 @@
   - Get list of supported models (it takes a lot of time
   - Avoid exhausting billing by using cheapest model for the sake of this exercise https://openai.com/api/pricing/ (added chat_models.json)
   - Completing POC by adding concept of history (TODO slicing window to avoid exhuasting tokens too fast)
-2. 
+
+2. Alpha
+ - Will use uvicorn for ASGI and FastAPI for the framework
+  - Generate a skeleton, by default all users are already blocked
+   - Run it by `uvicorn app_server:app --host 0.0.0.0 --port 8000 --reload`
