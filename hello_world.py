@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-import json
 from functools import lru_cache, partial
-from utils.dict_utils import slice_dict
 from openai import OpenAI
 
 from utils.model_negotiator import pick_cheapest_supported_model

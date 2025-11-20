@@ -1,5 +1,10 @@
+import json
 from functools import lru_cache
 from typing import Optional
+
+from openai import OpenAI
+
+from utils.dict_utils import slice_dict
 
 
 PRICE_FILE = 'chat_models.json'
@@ -13,7 +18,7 @@ def load_price_map() -> dict[str, float]:
     Load a mapping of model_id -> price_per_1k_input from chat_models.json
     which contains only the chat type models for filtering
     """
-    with open(PRICE_FILE, 'r', encoding='utf-8') as f:
+    with open(f'./utils/{PRICE_FILE}', 'r', encoding='utf-8') as f:
         raw = json.load(f)
 
     price_map: dict[str, float] = {key: value.get(PRICE_KEY) for (key, value) in raw.items()}
