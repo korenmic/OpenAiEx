@@ -1,6 +1,7 @@
 import sqlite3
 
 from mongo import db as mongo_db
+from mongo.consts import USERS_TABLE_NAME
 from utils.schemas import UserStatus
 
 
@@ -15,7 +16,7 @@ def test_init_db_creates_users_table(tmp_path, monkeypatch):
     connection = sqlite3.connect(str(db_path))
     try:
         cursor = connection.cursor()
-        cursor.execute('PRAGMA table_info(users)')
+        cursor.execute('PRAGMA table_info(%s)' % USERS_TABLE_NAME)
         rows = cursor.fetchall()
     finally:
         connection.close()

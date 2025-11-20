@@ -1,6 +1,12 @@
 import logging
 import os
 import sys
+from utils.consts import (
+    OPENAIEX_LOG_LEVEL_FILE_ENV,
+    OPENAIEX_LOG_LEVEL_STDOUT_ENV,
+    ENVIRONMENT_DEFAULTS,
+)
+
 from typing import Optional
 from logging.handlers import RotatingFileHandler
 
@@ -46,8 +52,14 @@ def configure_logging() -> None:
     os.makedirs("/tmp/openai_ex", exist_ok=True)
     log_file = "/tmp/openai_ex/app.log"
 
-    file_level = _parse_level(os.getenv("OPENAIEX_LOG_LEVEL_FILE"), LOG_LEVEL_DEBUG)
-    stdout_level = _parse_level(os.getenv("OPENAIEX_LOG_LEVEL_STDOUT"), LOG_LEVEL_INFO)
+    file_level = _parse_level(
+        os.getenv(OPENAIEX_LOG_LEVEL_FILE_ENV),
+        ENVIRONMENT_DEFAULTS[OPENAIEX_LOG_LEVEL_FILE_ENV],
+    )
+    stdout_level = _parse_level(
+        os.getenv(OPENAIEX_LOG_LEVEL_STDOUT_ENV),
+        ENVIRONMENT_DEFAULTS[OPENAIEX_LOG_LEVEL_STDOUT_ENV],
+    )
 
     root = logging.getLogger()
     root.setLevel(min(file_level, stdout_level, LOG_LEVEL_DEBUG))

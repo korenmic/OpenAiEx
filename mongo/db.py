@@ -1,10 +1,9 @@
 import os
 import sqlite3
 
+from utils.consts import CLEAR_DB_ENV, ENVIRONMENT_DEFAULTS, MONGO_DB_FILE_ENV
 from utils.schemas import UserStatus
-
-DB_FILE_ENV = 'MONGO_DB_FILE'
-DB_FILE_DEFAULT = os.path.join(os.path.dirname(__file__), 'mongo.db')
+from mongo.consts import USERS_TABLE_NAME
 
 
 def get_db_path() -> str:
@@ -12,7 +11,9 @@ def get_db_path() -> str:
 
     The value can be overridden via the MONGO_DB_FILE environment variable.
     """
-    return os.getenv(DB_FILE_ENV, DB_FILE_DEFAULT)
+    default_name = ENVIRONMENT_DEFAULTS[MONGO_DB_FILE_ENV]
+    default_path = os.path.join(os.path.dirname(__file__), default_name)
+    return os.getenv(MONGO_DB_FILE_ENV, default_path)
 
 
 def _user_status_columns() -> list[tuple[str, str, int]]:
@@ -38,6 +39,19 @@ def _user_status_columns() -> list[tuple[str, str, int]]:
     return columns
 
 
+def _should_clear_db() -> bool:
+    value = os.getenv(CLEAR_DB_ENV)
+    if value is None:
+        default_value = ENVIRONMENT_DEFAULTS[CLEAR_DB_ENV]
+        return bool(default_value)
+    value_lower = value.lower()
+    if value_lower in ('1', 'true', 'yes', 'on'):
+        return True
+    if value_lower in ('0', 'false', 'no', 'off'):
+        return False
+    return ENVIRONMENT_DEFAULTS[CLEAR_DB_ENV]
+
+
 def init_db() -> None:
     """Create the users table if it does not exist.
 
@@ -47,6 +61,9 @@ def init_db() -> None:
     directory = os.path.dirname(db_path)
     if directory and not os.path.exists(directory):
         os.makedirs(directory)
+
+    if _should_clear_db() and os.path.exists(db_path):
+        os.remove(db_path)
 
     connection = sqlite3.connect(db_path)
     try:
@@ -60,7 +77,10 @@ def init_db() -> None:
             if name == 'username':
                 parts.append('PRIMARY KEY')
             column_sql_parts.append(' '.join(parts))
-        create_sql = 'CREATE TABLE IF NOT EXISTS users (%s)' % ', '.join(column_sql_parts)
+        create_sql = 'CREATE TABLE IF NOT EXISTS %s (%s)' % (
+            USERS_TABLE_NAME,
+            ', '.join(column_sql_parts),
+        )
         cursor.execute(create_sql)
         connection.commit()
     finally:
