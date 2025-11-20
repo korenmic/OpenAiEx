@@ -24,7 +24,7 @@ jobs:
           pip install -r requirements.txt   # if you have one
 
       - name: Run pylint (errors only)
-        working-directory: "PC code"
+        working-directory: "."
         run: |
           pylint --errors-only *.py
           # or recursively:
