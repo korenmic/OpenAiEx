@@ -25,7 +25,7 @@ Assumes OPENAI_API_KEY is set in the environment for the OpenAI SDK.
 """
 
 configure_logging()
-logger = logging.getLogger("openai_ex.app")
+logger = logging.getLogger('openai_ex.app')
 
 client = OpenAI()
 
@@ -35,7 +35,7 @@ NEGOTIATED_MODEL_ID, NEGOTIATED_MODEL_PRICE = pick_cheapest_supported_model(clie
 app = FastAPI()
 
 
-@app.post("/chat", response_model=ChatResponse)
+@app.post('/chat', response_model=ChatResponse)
 async def chat(req: ChatRequest) -> ChatResponse:
     """
     Man-in-the-middle endpoint.
@@ -53,12 +53,12 @@ async def chat(req: ChatRequest) -> ChatResponse:
 
         response = client.responses.create(
             model=model_id,
-            input=[{"role": "user", "content": req.message}],
+            input=[{'role': 'user', 'content': req.message}],
         )
 
         latency = time.perf_counter() - start
         logger.info(
-            "chat_response id=%s model=%s latency=%.3fs",
+            'chat_response id=%s model=%s latency=%.3fs',
             request_id,
             response.model,
             latency,
@@ -69,5 +69,5 @@ async def chat(req: ChatRequest) -> ChatResponse:
         return ChatResponse(model=response.model, reply=reply_text)
 
     except Exception as exc:  # noqa: BLE001
-        logger.exception("chat_error id=%s", request_id)
+        logger.exception('chat_error id=%s', request_id)
         raise HTTPException(status_code=500, detail=str(exc)) from exc

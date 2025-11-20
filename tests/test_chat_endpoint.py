@@ -15,9 +15,9 @@ def test_chat_endpoint_roundtrip() -> None:
     This test assumes that OPENAI_API_KEY is set in the environment.
     It exercises the FastAPI app in-process (no external server needed).
     """
-    if "OPENAI_API_KEY" not in os.environ:
+    if 'OPENAI_API_KEY' not in os.environ:
         # Make it explicit why the test would otherwise fail.
-        raise RuntimeError("OPENAI_API_KEY must be set for this test to run.")
+        raise RuntimeError('OPENAI_API_KEY must be set for this test to run.')
 
     payload = ChatRequest(message="Hello from pytest")
     resp = client.post("/chat", json=payload.model_dump())
