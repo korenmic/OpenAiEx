@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class ChatRequest(BaseModel):
     """Request schema for the /chat endpoint."""
 
+    username: str
     message: str
 
 

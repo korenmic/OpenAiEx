@@ -6,7 +6,8 @@ ALPHA
    - Run it by `uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload`
    - Add tests: pytest client sanity, and github action pylint
    - Move model_negotiator from hello_world to utils, use in server app
-
+  - Generate mongo skeleton
+   - Run it by `uvicorn mongo.server:app --host 0.0.0.0 --port 8001 --reload`
 
 0.1
 POC

@@ -19,8 +19,8 @@ def test_chat_endpoint_roundtrip() -> None:
         # Make it explicit why the test would otherwise fail.
         raise RuntimeError('OPENAI_API_KEY must be set for this test to run.')
 
-    payload = ChatRequest(message="Hello from pytest")
-    resp = client.post("/chat", json=payload.model_dump())
+    payload = ChatRequest(username='pytest-user', message='Hello from pytest')
+    resp = client.post('/chat', json=payload.model_dump())
 
     assert resp.status_code == 200
 
