@@ -21,10 +21,11 @@ def load_price_map() -> dict[str, float]:
     with open(f'./utils/{PRICE_FILE}', 'r', encoding='utf-8') as f:
         raw = json.load(f)
 
-    price_map: dict[str, float] = {key: value.get(PRICE_KEY) for (key, value) in raw.items()}
+    price_map: dict[str, float] = {
+        key: value.get(PRICE_KEY) for (key, value) in raw.items() if value.get(PRICE_KEY) is not None}
 
     if not price_map:
-        raise RuntimeError(f'No usable prices found in {path}')
+        raise RuntimeError(f'No usable prices found in {PRICE_FILE}')
 
     return price_map
 
