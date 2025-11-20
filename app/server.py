@@ -1,5 +1,9 @@
+import logging
+import time
+import uuid
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI
+from utils.logging_config import configure_logging
 from utils.model_negotiator import pick_cheapest_supported_model
 
 from app.schemas import ChatRequest, ChatResponse
@@ -20,6 +24,9 @@ To run locally (once deps are installed):
 Assumes OPENAI_API_KEY is set in the environment for the OpenAI SDK.
 """
 
+configure_logging()
+logger = logging.getLogger("openai_ex.app")
+
 client = OpenAI()
 
 # Decide on the cheapest supported chat model once at startup,
@@ -37,9 +44,11 @@ async def chat(req: ChatRequest) -> ChatResponse:
     - No DB or context window yet.
     - Always a single-turn request: just the new message.
     """
+    request_id = str(uuid.uuid4())
+    start = time.perf_counter()
+    logger.info("chat_request id=%s message=%r", request_id, req.message)
+
     try:
-        # For now we hard-code a reasonably cheap chat model.
-        # You can swap this for your model negotiator later.
         model_id = NEGOTIATED_MODEL_ID
 
         response = client.responses.create(
@@ -47,11 +56,18 @@ async def chat(req: ChatRequest) -> ChatResponse:
             input=[{"role": "user", "content": req.message}],
         )
 
-        # Convenience property exposed by the SDK for text output
+        latency = time.perf_counter() - start
+        logger.info(
+            "chat_response id=%s model=%s latency=%.3fs",
+            request_id,
+            response.model,
+            latency,
+        )
+
         reply_text = response.output_text
 
         return ChatResponse(model=response.model, reply=reply_text)
 
     except Exception as exc:  # noqa: BLE001
-        # In a real service, you'd log this properly.
+        logger.exception("chat_error id=%s", request_id)
         raise HTTPException(status_code=500, detail=str(exc)) from exc
