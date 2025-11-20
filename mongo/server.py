@@ -3,6 +3,7 @@ import os
 
 import httpx
 from fastapi import FastAPI, HTTPException
+from mongo.db import init_db
 
 
 from utils.logging_config import configure_logging
@@ -25,6 +26,10 @@ logger = logging.getLogger("openai_ex.mongo")
 
 
 app = FastAPI()
+
+@app.on_event('startup')
+async def startup_event() -> None:
+    init_db()
 
 
 @app.get("/users/{username}", response_model=UserStatus)
