@@ -12,5 +12,7 @@
 2. Alpha
  - Will use uvicorn for ASGI and FastAPI for the framework
   - Generate a skeleton, by default all users are already blocked
+   - source .venv/bin/activate
    - Run it by `uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload`
    - Add tests: pytest client sanity, and github action pylint
+   - Move model_negotiator from hello_world to utils, use in server app

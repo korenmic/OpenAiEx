@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI
+from utils.model_negotiator import pick_cheapest_supported_model
 
 from app.schemas import ChatRequest, ChatResponse
 
@@ -20,6 +21,10 @@ Assumes OPENAI_API_KEY is set in the environment for the OpenAI SDK.
 """
 
 client = OpenAI()
+
+# Decide on the cheapest supported chat model once at startup,
+# using the same negotiator logic as in hello_world.py.
+NEGOTIATED_MODEL_ID, NEGOTIATED_MODEL_PRICE = pick_cheapest_supported_model(client)
 app = FastAPI()
 
 
@@ -35,7 +40,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
     try:
         # For now we hard-code a reasonably cheap chat model.
         # You can swap this for your model negotiator later.
-        model_id = "gpt-4.1-mini"
+        model_id = NEGOTIATED_MODEL_ID
 
         response = client.responses.create(
             model=model_id,
