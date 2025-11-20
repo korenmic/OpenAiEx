@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 from openai import OpenAI
 
+from app.schemas import ChatRequest, ChatResponse
+
 """
-Minimal ASGI app server using FastAPI + Uvicorn.
+ASGI app server using FastAPI + Uvicorn.
 
 This service is intentionally simple:
 - no user auth
@@ -13,22 +14,13 @@ This service is intentionally simple:
 
 To run locally (once deps are installed):
 
-    uvicorn app_server:app --host 0.0.0.0 --port 8000 --reload
+    uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload
 
 Assumes OPENAI_API_KEY is set in the environment for the OpenAI SDK.
 """
 
 client = OpenAI()
 app = FastAPI()
-
-
-class ChatRequest(BaseModel):
-    message: str
-
-
-class ChatResponse(BaseModel):
-    model: str
-    reply: str
 
 
 @app.post("/chat", response_model=ChatResponse)

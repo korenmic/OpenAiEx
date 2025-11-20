@@ -1,28 +1,29 @@
-import json
-import sys
+import os
 
-import requests
+from fastapi.testclient import TestClient
 
-
-def main() -> None:
-    # Allow overriding the message from CLI, default to a simple test string
-    message = "Hello from the client"
-    if len(sys.argv) > 1:
-        message = " ".join(sys.argv[1:])
-
-    url = "http://localhost:8000/chat"
-    payload = {"message": message}
-
-    print(f"POST {url} with:", json.dumps(payload))
-
-    resp = requests.post(url, json=payload, timeout=30)
-    resp.raise_for_status()
-
-    data = resp.json()
-    print("\n=== Response ===")
-    print("Model:", data.get("model"))
-    print("Reply:", data.get("reply"))
+from app.server import app
+from app.schemas import ChatRequest, ChatResponse
 
 
-if __name__ == "__main__":
-    main()
+client = TestClient(app)
+
+
+def test_chat_endpoint_roundtrip() -> None:
+    """Basic sanity test for the /chat endpoint.
+
+    This test assumes that OPENAI_API_KEY is set in the environment.
+    It exercises the FastAPI app in-process (no external server needed).
+    """
+    if "OPENAI_API_KEY" not in os.environ:
+        # Make it explicit why the test would otherwise fail.
+        raise RuntimeError("OPENAI_API_KEY must be set for this test to run.")
+
+    payload = ChatRequest(message="Hello from pytest")
+    resp = client.post("/chat", json=payload.model_dump())
+
+    assert resp.status_code == 200
+
+    data = ChatResponse(**resp.json())
+    assert isinstance(data.reply, str)
+    assert data.reply.strip()

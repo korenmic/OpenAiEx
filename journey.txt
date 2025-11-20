@@ -12,4 +12,5 @@
 2. Alpha
  - Will use uvicorn for ASGI and FastAPI for the framework
   - Generate a skeleton, by default all users are already blocked
-   - Run it by `uvicorn app_server:app --host 0.0.0.0 --port 8000 --reload`
+   - Run it by `uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload`
+   - Add test run by `PYTHONPATH=`pwd` pytest -q ./tests/`
