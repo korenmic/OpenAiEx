@@ -96,7 +96,8 @@
   - Implement invalidate() method for cache invalidation on user creation
   - _Requirements: 3.6, 3.7, 3.8_
 
-- [-] 9. Implement content moderator service
+- [x] 9. Implement content moderator service
+
 
   - Create app/services/content_moderator.py with ContentModerator class
   - Implement check_for_violations() method using word boundary regex
@@ -104,26 +105,31 @@
   - Implement case-insensitive, exact word matching
   - _Requirements: 3.1, 3.4, 3.5_
 
-- [-] 9.1 Write property test for mention detection
+- [x] 9.1 Write property test for mention detection
+
 
   - **Property 10: Username mention detection**
   - **Validates: Requirements 3.1**
 
-- [ ] 9.2 Write property test for case-insensitive matching
+- [x] 9.2 Write property test for case-insensitive matching
+
   - **Property 13: Case-insensitive username matching**
   - **Validates: Requirements 3.4**
 
-- [ ] 9.3 Write property test for exact matching
+- [x] 9.3 Write property test for exact matching
+
   - **Property 14: Exact match only (no substring matching)**
   - **Validates: Requirements 3.5**
 
-- [ ] 10. Implement OpenAI client
+- [-] 10. Implement OpenAI client
+
   - Create app/services/openai_client.py implementing OpenAIClient protocol
   - Implement send_chat_request() using httpx with proper authentication headers
   - Handle errors and timeouts
   - _Requirements: 2.1, 7.2, 7.3_
 
-- [ ] 10.1 Write property test for API key usage
+- [-] 10.1 Write property test for API key usage
+
   - **Property 22: Single API key for all users**
   - **Validates: Requirements 7.2**
 
