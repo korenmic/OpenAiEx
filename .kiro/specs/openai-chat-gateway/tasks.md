@@ -31,7 +31,8 @@
   - Define all interface methods with type hints
   - _Requirements: 9.1, 9.4_
 
-- [-] 5. Implement PostgreSQL repository
+- [x] 5. Implement PostgreSQL repository
+
 
   - Create app/repositories/postgres_repository.py implementing DatabaseRepository protocol
   - Implement create_user, get_user, get_all_users, get_all_usernames, update_user methods
@@ -39,28 +40,34 @@
   - Use SQLModel with asyncpg for async PostgreSQL operations
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 8.5_
 
-- [-] 5.1 Write property test for user creation
+- [x] 5.1 Write property test for user creation
+
 
   - **Property 1: User creation initializes block count to zero**
   - **Validates: Requirements 1.1**
 
-- [ ] 5.2 Write property test for user data retrieval
+- [x] 5.2 Write property test for user data retrieval
+
   - **Property 2: User data retrieval accuracy**
   - **Validates: Requirements 1.2**
 
-- [ ] 5.3 Write property test for list all users
+- [x] 5.3 Write property test for list all users
+
   - **Property 3: List all users completeness**
   - **Validates: Requirements 1.3**
 
-- [ ] 5.4 Write property test for persistence
+- [x] 5.4 Write property test for persistence
+
   - **Property 4: User data persistence across restarts**
   - **Validates: Requirements 1.4**
 
-- [ ] 5.5 Write property test for duplicate rejection
+- [x] 5.5 Write property test for duplicate rejection
+
   - **Property 5: Duplicate username rejection**
   - **Validates: Requirements 1.5**
 
-- [ ] 6. Implement Redis cache client
+- [-] 6. Implement Redis cache client
+
   - Create app/repositories/redis_cache.py implementing CacheClient protocol
   - Implement get, set, delete, exists methods using aioredis
   - Add health_check() method
