@@ -39,7 +39,8 @@
   - Use SQLModel with asyncpg for async PostgreSQL operations
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 8.5_
 
-- [ ] 5.1 Write property test for user creation
+- [-] 5.1 Write property test for user creation
+
   - **Property 1: User creation initializes block count to zero**
   - **Validates: Requirements 1.1**
 
