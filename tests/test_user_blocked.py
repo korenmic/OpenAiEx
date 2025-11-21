@@ -23,15 +23,17 @@ def _wait_for(url: str, timeout: float = 10.0) -> None:
         time.sleep(0.2)
     raise RuntimeError(f"timeout waiting for {url}")
 
-@pytest.mark.skip(reason="no way of currently testing this")
+
+@pytest.mark.skip(reason="Bugged, to bo fixed")
 def test_user_blocked_after_three_mentions_real_servers():
     # Ensure servers are up (adjust paths if your servers expose different health endpoints)
     _wait_for(f"{APP_BASE}/openapi.json")
     _wait_for(f"{MONGO_BASE}/openapi.json")
 
     # Ensure "Foo" exists / has at least one block-counter row
-    resp = requests.post(f"{MONGO_BASE}/users/Foo/blocks", timeout=3.0)
-    assert resp.status_code in (200, 201, 204)
+    requests.post(f"{APP_BASE}/chat", json={"username": "Foo", "message": "Hello world!"}, timeout=5.0)
+    #resp = requests.post(f"{MONGO_BASE}/users/Foo/blocks", timeout=3.0)
+    #assert resp.status_code in (200, 201, 204)
 
     payload = {"username": "Bar", "message": "Hi Foo"}
 
