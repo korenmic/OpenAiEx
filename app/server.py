@@ -1,18 +1,18 @@
 import logging
-import os
 import time
 import uuid
-import requests
 from typing import Optional
 from functools import lru_cache
+
+import requests
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI
+
+from mongo.utils import get_mongo_base_url
+from utils.consts import BLOCKED_MESSAGE
 from utils.logging_config import configure_logging
 from utils.model_negotiator import pick_cheapest_supported_model
 from utils.schemas import ChatRequest, ChatResponse
-
-from app.consts import BLOCKED_MESSAGE
-from mongo.utils import get_mongo_base_url
 
 """
 ASGI app server using FastAPI + Uvicorn.

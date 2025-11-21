@@ -1,7 +1,9 @@
 import os
 import sqlite3
+from typing import get_args
 
 from utils.consts import CLEAR_DB_ENV, ENVIRONMENT_DEFAULTS, MONGO_DB_FILE_ENV
+from utils.defaults import get_variable, get_bool_env
 from utils.schemas import UserStatus
 from mongo.consts import USERS_TABLE_NAME
 
@@ -23,9 +25,9 @@ def _user_status_columns() -> list[tuple[str, str, int]]:
     table layout stays in sync with the Python model.
     """
     columns: list[tuple[str, str, int]] = []
-    fields = UserStatus.__fields__
+    fields = UserStatus.model_fields
     for name, field in fields.items():
-        python_type = field.type_
+        python_type = field.annotation
         if python_type is str:
             sqlite_type = 'TEXT'
         elif python_type is bool:
@@ -33,23 +35,11 @@ def _user_status_columns() -> list[tuple[str, str, int]]:
         else:
             raise TypeError('Unsupported field %s with type %r' % (name, python_type))
         not_null = 0
-        if not field.allow_none:
+        field_supports_none = type(None) in get_args(field.annotation) or field.default is None
+        if not field_supports_none:
             not_null = 1
         columns.append((name, sqlite_type, not_null))
     return columns
-
-
-def _should_clear_db() -> bool:
-    value = os.getenv(CLEAR_DB_ENV)
-    if value is None:
-        default_value = ENVIRONMENT_DEFAULTS[CLEAR_DB_ENV]
-        return bool(default_value)
-    value_lower = value.lower()
-    if value_lower in ('1', 'true', 'yes', 'on'):
-        return True
-    if value_lower in ('0', 'false', 'no', 'off'):
-        return False
-    return ENVIRONMENT_DEFAULTS[CLEAR_DB_ENV]
 
 
 def init_db() -> None:
@@ -62,7 +52,7 @@ def init_db() -> None:
     if directory and not os.path.exists(directory):
         os.makedirs(directory)
 
-    if _should_clear_db() and os.path.exists(db_path):
+    if get_bool_env(CLEAR_DB_ENV) and os.path.exists(db_path):
         os.remove(db_path)
 
     connection = sqlite3.connect(db_path)

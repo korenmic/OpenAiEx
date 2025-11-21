@@ -1,22 +1,39 @@
+TODO -
+0.4
+RC
+- Make final adjustments for this to be easily deployable within K8S
+- Make sure this potentially handles well under heavy stress "handled asynchronously"
+
+TODO -
+0.3
+BETA (almost good enough for submission)
+- Introduce sliding window to keep context within the same chat
+- Final refactors to make the "mechanism" for "development team" easy to implement
+	- Of Unblocking user on demand
+	- Of Unblocking user after a period of time
+
 0.2
 ALPHA
- - Will use uvicorn for ASGI and FastAPI for the framework
-  - Generate a skeleton, by default all users are already blocked
-   - source .venv/bin/activate
-   - Run it by `uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload`
-   - Add tests: pytest client sanity, and github action pylint
-   - Move model_negotiator from hello_world to utils, use in server app
-  - Generate mongo skeleton
-   - Run it by `uvicorn mongo.server:app --host 0.0.0.0 --port 8001 --reload`
+- Will use uvicorn for ASGI and FastAPI for the framework
+	- Generate a skeleton, by default all users are already blocked
+		- source .venv/bin/activate
+		- Run it by `uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload`
+		- Add tests: pytest client sanity, and github action pylint
+		- Move model_negotiator from hello_world to utils, use in server app
+	- Generate mongo skeleton
+		- Run it by `uvicorn mongo.server:app --host 0.0.0.0 --port 8001 --reload`
+		- Add support for blocking users after mentioning others for 3 times
+		- Refactor consts and environment variable names
+	        - More tests <-- You're here
 
 0.1
 POC
- - Will need to talk to openai endpoint
- - Fill billing details: https://platform.openai.com/settings/organization/billing/overview
- - Generate api key: https://platform.openai.com/settings/organization/api-keys
- - Generate hello world script (hello_world.py)
-  - Out of 3 possible endpoints, pick future proof endpoint https://api.openai.com/v1/responses
-  - Add requirements.txt
-  - Get list of supported models (it takes a lot of time
-  - Avoid exhausting billing by using cheapest model for the sake of this exercise https://openai.com/api/pricing/ (added chat_models.json)
-  - Completing POC by adding concept of history (TODO slicing window to avoid exhuasting tokens too fast)
+- Will need to talk to openai endpoint
+- Fill billing details: https://platform.openai.com/settings/organization/billing/overview
+- Generate api key: https://platform.openai.com/settings/organization/api-keys
+- Generate hello world script (hello_world.py)
+	- Out of 3 possible endpoints, pick future proof endpoint https://api.openai.com/v1/responses
+	- Add requirements.txt
+	- Get list of supported models by endpoint
+	- Avoid exhausting billing by using cheapest model for the sake of this exercise https://openai.com/api/pricing/ (added chat_models.json)
+	- Completing POC by adding concept of history (TODO slicing window to avoid exhuasting tokens too fast)

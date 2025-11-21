@@ -1,14 +1,15 @@
 import logging
 import os
 import sys
+from typing import Optional
+from logging.handlers import RotatingFileHandler
+
+from utils.defaults import get_variable
 from utils.consts import (
     OPENAIEX_LOG_LEVEL_FILE_ENV,
     OPENAIEX_LOG_LEVEL_STDOUT_ENV,
     ENVIRONMENT_DEFAULTS,
 )
-
-from typing import Optional
-from logging.handlers import RotatingFileHandler
 
 
 # Re-export standard levels as named constants for clarity
@@ -18,23 +19,16 @@ LOG_LEVEL_WARNING = logging.WARNING
 LOG_LEVEL_ERROR = logging.ERROR
 LOG_LEVEL_CRITICAL = logging.CRITICAL
 
+_MAPPING = {
+    'DEBUG': LOG_LEVEL_DEBUG,
+    'INFO': LOG_LEVEL_INFO,
+    'WARNING': LOG_LEVEL_WARNING,
+    'ERROR': LOG_LEVEL_ERROR,
+    'CRITICAL': LOG_LEVEL_CRITICAL,
+}
 
-# Defaults can be overridden via environment variables:
-#   OPENAIEX_LOG_LEVEL_FILE
-#   OPENAIEX_LOG_LEVEL_STDOUT
-#
-# Values should be one of: DEBUG, INFO, WARNING, ERROR, CRITICAL.
-def _parse_level(value: Optional[str], default: int) -> int:
-    if not value:
-        return default
-    mapping = {
-        "DEBUG": LOG_LEVEL_DEBUG,
-        "INFO": LOG_LEVEL_INFO,
-        "WARNING": LOG_LEVEL_WARNING,
-        "ERROR": LOG_LEVEL_ERROR,
-        "CRITICAL": LOG_LEVEL_CRITICAL,
-    }
-    return mapping.get(value.upper(), default)
+def _parse_level(key) -> int:
+    return _MAPPING.get(key.upper(), LOG_LEVEL_DEBUG)
 
 
 def configure_logging() -> None:
@@ -52,14 +46,8 @@ def configure_logging() -> None:
     os.makedirs("/tmp/openai_ex", exist_ok=True)
     log_file = "/tmp/openai_ex/app.log"
 
-    file_level = _parse_level(
-        os.getenv(OPENAIEX_LOG_LEVEL_FILE_ENV),
-        ENVIRONMENT_DEFAULTS[OPENAIEX_LOG_LEVEL_FILE_ENV],
-    )
-    stdout_level = _parse_level(
-        os.getenv(OPENAIEX_LOG_LEVEL_STDOUT_ENV),
-        ENVIRONMENT_DEFAULTS[OPENAIEX_LOG_LEVEL_STDOUT_ENV],
-    )
+    file_level = _parse_level(get_variable(OPENAIEX_LOG_LEVEL_FILE_ENV))
+    stdout_level = _parse_level(get_variable(OPENAIEX_LOG_LEVEL_STDOUT_ENV))
 
     root = logging.getLogger()
     root.setLevel(min(file_level, stdout_level, LOG_LEVEL_DEBUG))

@@ -2,12 +2,14 @@ import sqlite3
 
 from mongo import db as mongo_db
 from mongo.consts import USERS_TABLE_NAME
+from utils.consts import MONGO_DB_FILE_ENV
 from utils.schemas import UserStatus
 
+_TEST_USERS_DB = 'test_users.db'
 
 def test_init_db_creates_users_table(tmp_path, monkeypatch):
-    db_path = tmp_path / 'test_users.db'
-    monkeypatch.setenv('MONGO_DB_FILE', str(db_path))
+    db_path = tmp_path / _TEST_USERS_DB
+    monkeypatch.setenv(MONGO_DB_FILE_ENV, str(db_path))
 
     mongo_db.init_db()
 
@@ -27,5 +29,5 @@ def test_init_db_creates_users_table(tmp_path, monkeypatch):
     assert columns.get('blocked') == 'INTEGER'
 
     # Ensure schema stayed in sync with the Pydantic model.
-    model_fields = set(UserStatus.__fields__.keys())
+    model_fields = set(UserStatus.model_fields.keys())
     assert set(columns.keys()) == model_fields
