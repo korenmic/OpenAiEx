@@ -88,21 +88,24 @@
   - **Property 8: Concurrent chat requests complete successfully (different users)**
   - **Validates: Requirements 2.4, 4.8**
 
-- [-] 8. Implement username caching service
+- [x] 8. Implement username caching service
+
 
   - Create app/services/username_cache.py with UsernameCache class
   - Implement get_usernames_except() method with Redis caching
   - Implement invalidate() method for cache invalidation on user creation
   - _Requirements: 3.6, 3.7, 3.8_
 
-- [ ] 9. Implement content moderator service
+- [-] 9. Implement content moderator service
+
   - Create app/services/content_moderator.py with ContentModerator class
   - Implement check_for_violations() method using word boundary regex
   - Use username cache for efficient lookups
   - Implement case-insensitive, exact word matching
   - _Requirements: 3.1, 3.4, 3.5_
 
-- [ ] 9.1 Write property test for mention detection
+- [-] 9.1 Write property test for mention detection
+
   - **Property 10: Username mention detection**
   - **Validates: Requirements 3.1**
 
