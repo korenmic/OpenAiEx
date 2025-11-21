@@ -201,14 +201,17 @@
   - **Validates: Requirements 4.5**
 
 
+
 - [ ] 12.5 Write property test for OpenAI error propagation
   - **Property 9: OpenAI errors are propagated**
   - **Validates: Requirements 2.5, 6.1**
 
-- [ ] 13. Implement test mock implementations
+- [x] 13. Implement test mock implementations
+
   - Create app/tests/mocks.py with InMemoryRepository, InMemoryCache, LocalLockManager, MockOpenAIClient
   - Implement all protocol methods with in-memory data structures
   - _Requirements: 9.1, 9.4_
+
 
 - [ ] 14. Set up dependency injection
   - Create app/core/dependencies.py with FastAPI dependency functions
