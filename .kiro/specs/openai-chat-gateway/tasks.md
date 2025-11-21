@@ -66,14 +66,16 @@
   - **Property 5: Duplicate username rejection**
   - **Validates: Requirements 1.5**
 
-- [-] 6. Implement Redis cache client
+- [x] 6. Implement Redis cache client
+
 
   - Create app/repositories/redis_cache.py implementing CacheClient protocol
   - Implement get, set, delete, exists methods using aioredis
   - Add health_check() method
   - _Requirements: 3.6, 8.6_
 
-- [ ] 7. Implement Redis distributed lock manager
+- [-] 7. Implement Redis distributed lock manager
+
   - Create app/repositories/redis_lock_manager.py implementing LockManager protocol
   - Implement acquire_lock() with async context manager using Redlock algorithm
   - Handle lock timeout and release
