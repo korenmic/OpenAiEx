@@ -60,7 +60,7 @@ def get_openai_client() -> OpenAIClient:
 
 
 async def get_username_cache(
-    cache: CacheClient = None, db: DatabaseRepository = None
+    cache = None, db = None
 ) -> UsernameCache:
     """Get username cache dependency."""
     if cache is None:
@@ -71,7 +71,7 @@ async def get_username_cache(
 
 
 async def get_user_service(
-    db: DatabaseRepository = None, username_cache: UsernameCache = None
+    db = None, username_cache = None
 ) -> UserService:
     """Get user service dependency."""
     if db is None:
@@ -81,7 +81,7 @@ async def get_user_service(
     return UserService(db, username_cache)
 
 
-async def get_content_moderator(username_cache: UsernameCache = None) -> ContentModerator:
+async def get_content_moderator(username_cache = None) -> ContentModerator:
     """Get content moderator dependency."""
     if username_cache is None:
         username_cache = await get_username_cache()
@@ -89,10 +89,10 @@ async def get_content_moderator(username_cache: UsernameCache = None) -> Content
 
 
 async def get_chat_service(
-    user_service: UserService = None,
-    content_moderator: ContentModerator = None,
-    openai_client: OpenAIClient = None,
-    lock_manager: LockManager = None,
+    user_service = None,
+    content_moderator = None,
+    openai_client = None,
+    lock_manager = None,
 ) -> ChatService:
     """Get chat service dependency."""
     if user_service is None:

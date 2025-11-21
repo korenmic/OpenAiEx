@@ -165,7 +165,9 @@
 
 
 
-- [ ] 11.2 Write property test for blocking trigger
+- [x] 11.2 Write property test for blocking trigger
+
+
   - **Property 15: Block count of three triggers blocked status**
   - **Validates: Requirements 4.1**
 
@@ -179,24 +181,29 @@
   - _Requirements: 2.1, 2.2, 2.6, 2.7, 3.2, 3.3_
 
 
+
 - [ ] 12.1 Write property test for non-blocked users
   - **Property 6: Non-blocked users can make chat requests**
   - **Validates: Requirements 2.1, 2.2**
 
 
+
 - [ ] 12.2 Write property test for blocked users
   - **Property 7: Blocked users are rejected**
+
 
   - **Validates: Requirements 2.3, 4.2, 4.3**
 
 
 - [ ] 12.3 Write property test for violations don't prevent processing
   - **Property 12: Violations don't prevent request processing**
+
   - **Validates: Requirements 3.3**
 
 
 
-- [ ] 12.4 Write property test for third violation behavior
+- [x] 12.4 Write property test for third violation behavior
+
   - **Property 16: Third violation request completes before blocking**
   - **Validates: Requirements 4.5**
 
@@ -213,23 +220,32 @@
   - _Requirements: 9.1, 9.4_
 
 
-- [ ] 14. Set up dependency injection
+- [x] 14. Set up dependency injection
+
+
   - Create app/core/dependencies.py with FastAPI dependency functions
   - Implement get_db, get_cache, get_lock_manager, get_openai_client
   - Support environment-based configuration (production vs test)
   - _Requirements: 8.4_
 
-- [ ] 15. Implement admin authentication middleware
+- [x] 15. Implement admin authentication middleware
+
+
+
+
   - Create app/api/auth.py with verify_admin_key dependency
   - Check X-Admin-Key header against configured admin key
   - Return 401 Unauthorized if invalid
   - _Requirements: 1.6_
 
-- [ ] 15.1 Write unit test for admin authentication
+- [x] 15.1 Write unit test for admin authentication
+
   - Test valid admin key returns success
   - Test invalid admin key returns 401
   - Test missing admin key returns 401
   - _Requirements: 1.6, 9.7_
+
+
 
 - [ ] 16. Implement admin user management endpoints
   - Create app/api/admin.py with admin router
@@ -237,13 +253,19 @@
   - Implement GET /admin/users/{username} (get user)
   - Implement GET /admin/users (list all users)
   - All endpoints require admin authentication
+
+
   - _Requirements: 1.1, 1.2, 1.3, 1.5, 1.6_
+
 
 - [ ] 16.1 Write property test for correct status codes
   - **Property 17: Correct HTTP status codes for success**
   - **Validates: Requirements 5.1, 5.2, 5.3**
 
-- [ ] 16.2 Write property test for 404 errors
+
+- [x] 16.2 Write property test for 404 errors
+
+
   - **Property 18: 404 for non-existent resources**
   - **Validates: Requirements 5.4**
 
@@ -251,21 +273,31 @@
   - **Property 19: 400 for invalid input**
   - **Validates: Requirements 5.5, 6.4**
 
+
+
 - [ ] 17. Implement public chat endpoint
   - Create app/api/chat.py with chat router
   - Implement POST /chat endpoint
+
+
   - Integrate with chat service for request processing
   - Handle auto-creation when enabled
   - Return response with block_count and violation_detected
   - _Requirements: 2.1, 2.2, 2.3, 2.6, 2.7_
 
-- [ ] 18. Implement health and readiness endpoints
+- [x] 18. Implement health and readiness endpoints
+
+
   - Create app/api/health.py with health router
   - Implement GET /health (liveness probe - always returns 200)
   - Implement GET /ready (readiness probe - checks DB and Redis connectivity)
   - _Requirements: 8.1, 8.2_
 
-- [ ] 19. Implement application lifecycle management
+
+
+- [x] 19. Implement application lifecycle management
+
+
   - Create app/main.py with FastAPI app initialization
   - Implement lifespan context manager for startup/shutdown
   - Validate configuration on startup

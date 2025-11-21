@@ -2,8 +2,8 @@
 from typing import List, Optional
 
 from sqlalchemy.exc import IntegrityError
-from sqlmodel import Session, create_engine, select
-from sqlmodel.ext.asyncio.session import AsyncEngine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
+from sqlmodel import select, SQLModel
 
 from app.models.user import User
 

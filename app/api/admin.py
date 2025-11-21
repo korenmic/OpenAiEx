@@ -4,6 +4,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.api.auth import verify_admin_key
+from app.core.dependencies import get_user_service
 from app.models.user import CreateUserRequest, UserResponse
 from app.services.user_service import UserService
 
@@ -13,7 +14,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 @router.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(
     request: CreateUserRequest,
-    user_service: UserService = Depends(),
+    user_service: UserService = Depends(get_user_service),
     admin_key: str = Depends(verify_admin_key),
 ) -> UserResponse:
     """Create a new user (admin only)."""
@@ -31,7 +32,7 @@ async def create_user(
 @router.get("/users/{username}", response_model=UserResponse)
 async def get_user(
     username: str,
-    user_service: UserService = Depends(),
+    user_service: UserService = Depends(get_user_service),
     admin_key: str = Depends(verify_admin_key),
 ) -> UserResponse:
     """Get user by username (admin only)."""
@@ -48,7 +49,7 @@ async def get_user(
 
 @router.get("/users", response_model=dict)
 async def list_users(
-    user_service: UserService = Depends(),
+    user_service: UserService = Depends(get_user_service),
     admin_key: str = Depends(verify_admin_key),
 ) -> dict:
     """List all users (admin only)."""
