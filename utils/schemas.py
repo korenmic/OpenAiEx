@@ -24,3 +24,5 @@ class UserStatus(BaseModel):
 
     username: str
     blocked: bool = False
+
+    block_counter: int = 0

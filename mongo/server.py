@@ -3,7 +3,7 @@ import os
 
 import httpx
 from fastapi import FastAPI, HTTPException
-from mongo.db import init_db, list_usernames
+from mongo.db import init_db, list_usernames, increase_block_counter
 
 
 from utils.logging_config import configure_logging
@@ -45,3 +45,10 @@ async def get_user_status(username: str) -> UserStatus:
 async def list_users() -> list[str]:
     """Return the list of known usernames."""
     return list_usernames()
+
+
+@app.post('/users/{username}/blocks')
+async def increase_user_block_counter(username: str) -> dict[str, int]:
+    """Increase the block counter for a user and return the new value."""
+    new_value = increase_block_counter(username)
+    return {'username': username, 'block_counter': new_value}

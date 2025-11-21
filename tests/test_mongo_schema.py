@@ -27,6 +27,7 @@ def test_init_db_creates_users_table(tmp_path, monkeypatch):
     assert columns.get('username') == 'TEXT'
     assert columns.get('blocked') == 'INTEGER'
 
+    assert columns.get('block_counter') == 'INTEGER'
     # Ensure schema stayed in sync with the Pydantic model.
     model_fields = set(UserStatus.model_fields.keys())
     assert set(columns.keys()) == model_fields

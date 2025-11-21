@@ -31,6 +31,8 @@ def _user_status_columns() -> list[tuple[str, str, int]]:
             sqlite_type = 'TEXT'
         elif python_type is bool:
             sqlite_type = 'INTEGER'
+        elif python_type is int:
+            sqlite_type = 'INTEGER'
         else:
             raise TypeError('Unsupported field %s with type %r' % (name, python_type))
         not_null = 0
@@ -93,3 +95,27 @@ def list_usernames() -> list[str]:
     finally:
         connection.close()
     return [row[0] for row in rows]
+
+
+def increase_block_counter(username: str) -> int:
+    connection = _get_connection()
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+            'UPDATE %s SET block_counter = block_counter + 1 WHERE username = ?' % USERS_TABLE_NAME,
+            (username,),
+        )
+        if cursor.rowcount == 0:
+            cursor.execute(
+                'INSERT INTO %s (username, blocked, block_counter) VALUES (?, ?, ?)' % USERS_TABLE_NAME,
+                (username, 0, 1),
+            )
+        connection.commit()
+        cursor.execute(
+            'SELECT block_counter FROM %s WHERE username = ?' % USERS_TABLE_NAME,
+            (username,),
+        )
+        row = cursor.fetchone()
+    finally:
+        connection.close()
+    return int(row[0]) if row else 0
