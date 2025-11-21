@@ -195,9 +195,11 @@
   - **Validates: Requirements 3.3**
 
 
+
 - [ ] 12.4 Write property test for third violation behavior
   - **Property 16: Third violation request completes before blocking**
   - **Validates: Requirements 4.5**
+
 
 - [ ] 12.5 Write property test for OpenAI error propagation
   - **Property 9: OpenAI errors are propagated**
