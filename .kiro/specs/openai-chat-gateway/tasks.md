@@ -81,7 +81,8 @@
   - Handle lock timeout and release
   - _Requirements: 4.6, 4.7, 8.6_
 
-- [ ] 7.1 Write property test for per-user serialization
+- [-] 7.1 Write property test for per-user serialization
+
   - **Property 8: Concurrent chat requests complete successfully (different users)**
   - **Validates: Requirements 2.4, 4.8**
 
