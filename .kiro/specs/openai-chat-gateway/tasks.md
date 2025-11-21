@@ -146,7 +146,8 @@
   - **Property 24: API key not exposed**
   - **Validates: Requirements 7.4**
 
-- [ ] 11. Implement user service
+- [-] 11. Implement user service
+
   - Create app/services/user_service.py with UserService class
   - Implement create_user, get_user, get_all_users, get_all_usernames_except methods
   - Implement increment_block_count with atomic transaction and is_blocked update
