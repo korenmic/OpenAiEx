@@ -1,0 +1,30 @@
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Database & ORM
+sqlmodel==0.0.14
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# Cache & Locks
+redis==5.0.1
+aioredis==2.0.1
+
+# HTTP Client
+httpx==0.25.2
+
+# Configuration
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+hypothesis==6.92.1
+
+# Development
+black==23.12.0
+ruff==0.1.8
+mypy==1.7.1

@@ -1,6 +1,7 @@
 # Implementation Plan
 
-- [ ] 1. Set up project structure and dependencies
+- [-] 1. Set up project structure and dependencies
+
   - Create directory structure: app/, app/models/, app/services/, app/repositories/, app/api/, app/core/, tests/
   - Create requirements.txt with FastAPI, SQLModel, asyncpg, aioredis, httpx, pytest, pytest-asyncio, Hypothesis
   - Create .env.example with all required environment variables
