@@ -1,8 +1,7 @@
 import sqlite3
 
 from mongo import db as mongo_db
-from mongo.consts import USERS_TABLE_NAME
-from utils.consts import MONGO_DB_FILE_ENV
+from utils.consts import MONGO_DB_FILE_ENV, USERS_TABLE_NAME
 from utils.schemas import UserStatus
 
 _TEST_USERS_DB = 'test_users.db'

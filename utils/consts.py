@@ -33,3 +33,4 @@ ENVIRONMENT_DEFAULTS = {
 
 # None-Environment consts
 BLOCKED_MESSAGE = 'Your user is currently blocked, contact support to release the block'
+USERS_TABLE_NAME = 'users'

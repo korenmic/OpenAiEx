@@ -1,9 +1,0 @@
-from utils.consts import (
-    MONGO_HOST_ENV,
-    MONGO_PORT_ENV,
-    AUTO_ACCEPT_NEW_USERS_ENV,
-    MONGO_MAX_USERS_ENV,
-    ENVIRONMENT_DEFAULTS,
-)
-
-USERS_TABLE_NAME = 'users'

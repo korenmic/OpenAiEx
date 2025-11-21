@@ -107,7 +107,7 @@ def _check_for_illegal_words(message: str, username: str) -> bool:
     Look for other usernames (except the name of the current user),
     simple split by whitespace
     """
-    return any(set(message.split()) & set(_users_except(username))):
+    return any(set(message.split()) & set(_users_except(username)))
 
 
 @app.post('/chat', response_model=ChatResponse)
@@ -129,9 +129,6 @@ async def chat(req: ChatRequest) -> ChatResponse:
     illegal_words_found = _check_for_illegal_words(req.message, req.username)
     if illegal_words_found:
         increase_block_counter(req.username)
-
-    if user_status := _get_user_status(request_id, req) is False:
-        return ChatResponse(model='', reply=BLOCKED_MESSAGE)
 
     try:
         model_id = get_model_id()

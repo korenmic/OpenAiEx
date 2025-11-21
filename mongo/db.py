@@ -1,21 +1,20 @@
 import os
 import sqlite3
+from functools import lru_cache
 from typing import get_args
 
-from utils.consts import CLEAR_DB_ENV, ENVIRONMENT_DEFAULTS, MONGO_DB_FILE_ENV
+from utils.consts import CLEAR_DB_ENV, ENVIRONMENT_DEFAULTS, MONGO_DB_FILE_ENV, USERS_TABLE_NAME
 from utils.defaults import get_variable, get_bool_env
 from utils.schemas import UserStatus
-from mongo.consts import USERS_TABLE_NAME
 
 
+@lru_cache()
 def get_db_path() -> str:
     """Return the path to the mongo database file.
 
     The value can be overridden via the MONGO_DB_FILE environment variable.
     """
-    default_name = ENVIRONMENT_DEFAULTS[MONGO_DB_FILE_ENV]
-    default_path = os.path.join(os.path.dirname(__file__), default_name)
-    return os.getenv(MONGO_DB_FILE_ENV, default_path)
+    return get_variable(MONGO_DB_FILE_ENV)
 
 
 def _user_status_columns() -> list[tuple[str, str, int]]:
@@ -42,11 +41,7 @@ def _user_status_columns() -> list[tuple[str, str, int]]:
     return columns
 
 
-def init_db() -> None:
-    """Create the users table if it does not exist.
-
-    The table definition is derived from the UserStatus Pydantic model.
-    """
+def _init_path() -> None:
     db_path = get_db_path()
     directory = os.path.dirname(db_path)
     if directory and not os.path.exists(directory):
@@ -55,7 +50,19 @@ def init_db() -> None:
     if get_bool_env(CLEAR_DB_ENV) and os.path.exists(db_path):
         os.remove(db_path)
 
-    connection = sqlite3.connect(db_path)
+
+def _get_connection() -> sqlite3.Connection:
+    return sqlite3.connect(get_db_path())
+
+
+def init_db() -> None:
+    """Create the users table if it does not exist.
+
+    The table definition is derived from the UserStatus Pydantic model.
+    """
+    _init_path()
+
+    connection = _get_connection()
     try:
         cursor = connection.cursor()
         columns = _user_status_columns()
@@ -75,3 +82,14 @@ def init_db() -> None:
         connection.commit()
     finally:
         connection.close()
+
+
+def list_usernames() -> list[str]:
+    connection = _get_connection()
+    try:
+        cursor = connection.cursor()
+        cursor.execute('SELECT username FROM %s' % USERS_TABLE_NAME)
+        rows = cursor.fetchall()
+    finally:
+        connection.close()
+    return [row[0] for row in rows]

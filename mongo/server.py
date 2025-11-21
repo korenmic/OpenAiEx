@@ -3,7 +3,7 @@ import os
 
 import httpx
 from fastapi import FastAPI, HTTPException
-from mongo.db import init_db
+from mongo.db import init_db, list_usernames
 
 
 from utils.logging_config import configure_logging
@@ -43,9 +43,5 @@ async def get_user_status(username: str) -> UserStatus:
 
 @app.get('/users', response_model=list[str])
 async def list_users() -> list[str]:
-    """Return the list of known usernames.
-
-    For now, we do not maintain a persistent user list yet, so this
-    returns an empty list as a placeholder.
-    """
-    return []
+    """Return the list of known usernames."""
+    return list_usernames()

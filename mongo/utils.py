@@ -3,13 +3,13 @@ import logging
 from functools import lru_cache
 from typing import Optional
 
-from utils.defaults import get_variable, get_bool_env
-from mongo.consts import (
+from utils.consts import (
     MONGO_HOST_ENV,
     MONGO_PORT_ENV,
     AUTO_ACCEPT_NEW_USERS_ENV,
     MONGO_MAX_USERS_ENV,
 )
+from utils.defaults import get_variable, get_bool_env
 
 
 logger = logging.getLogger('openai_ex.mongo.utils')
