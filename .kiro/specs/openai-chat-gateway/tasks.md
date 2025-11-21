@@ -24,13 +24,15 @@
   - Add Pydantic models for requests/responses (CreateUserRequest, UserResponse, ChatRequest, ChatResponse)
   - _Requirements: 1.1, 1.4_
 
-- [-] 4. Create abstraction layer protocols
+- [x] 4. Create abstraction layer protocols
+
 
   - Create app/core/protocols.py with DatabaseRepository, CacheClient, LockManager, OpenAIClient protocols
   - Define all interface methods with type hints
   - _Requirements: 9.1, 9.4_
 
-- [ ] 5. Implement PostgreSQL repository
+- [-] 5. Implement PostgreSQL repository
+
   - Create app/repositories/postgres_repository.py implementing DatabaseRepository protocol
   - Implement create_user, get_user, get_all_users, get_all_usernames, update_user methods
   - Add initialize() method to create tables
