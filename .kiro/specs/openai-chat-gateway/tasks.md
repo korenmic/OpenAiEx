@@ -74,19 +74,22 @@
   - Add health_check() method
   - _Requirements: 3.6, 8.6_
 
-- [-] 7. Implement Redis distributed lock manager
+- [x] 7. Implement Redis distributed lock manager
+
 
   - Create app/repositories/redis_lock_manager.py implementing LockManager protocol
   - Implement acquire_lock() with async context manager using Redlock algorithm
   - Handle lock timeout and release
   - _Requirements: 4.6, 4.7, 8.6_
 
-- [-] 7.1 Write property test for per-user serialization
+- [x] 7.1 Write property test for per-user serialization
+
 
   - **Property 8: Concurrent chat requests complete successfully (different users)**
   - **Validates: Requirements 2.4, 4.8**
 
-- [ ] 8. Implement username caching service
+- [-] 8. Implement username caching service
+
   - Create app/services/username_cache.py with UsernameCache class
   - Implement get_usernames_except() method with Redis caching
   - Implement invalidate() method for cache invalidation on user creation
