@@ -1,7 +1,7 @@
 """Property-based tests for OpenAI client."""
 import pytest
 from hypothesis import given, settings, strategies as st
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 from app.services.openai_client import OpenAIHttpClient
 
@@ -24,12 +24,12 @@ async def test_single_api_key_for_all_users(messages: list[str]) -> None:
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
-        mock_response = AsyncMock()
-        # json() is NOT async in httpx, it's a regular method
+        mock_response = Mock()  # Use regular Mock, not AsyncMock
+        # json() and raise_for_status() are NOT async in httpx
         mock_response.json.return_value = {
             "choices": [{"message": {"content": "Mock response"}}]
         }
-        mock_response.raise_for_status = AsyncMock()
+        mock_response.raise_for_status.return_value = None
         mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
         mock_client.__aexit__.return_value = AsyncMock()
@@ -60,12 +60,12 @@ async def test_api_key_in_request_headers(message: str, api_key: str) -> None:
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
-        mock_response = AsyncMock()
-        # json() is NOT async in httpx, it's a regular method
+        mock_response = Mock()  # Use regular Mock, not AsyncMock
+        # json() and raise_for_status() are NOT async in httpx
         mock_response.json.return_value = {
             "choices": [{"message": {"content": "Mock response"}}]
         }
-        mock_response.raise_for_status = AsyncMock()
+        mock_response.raise_for_status.return_value = None
         mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
         mock_client.__aexit__.return_value = AsyncMock()
@@ -91,12 +91,13 @@ async def test_api_key_not_exposed_in_response() -> None:
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
-        mock_response = AsyncMock()
-        # json() is NOT async in httpx, it's a regular method
+        from unittest.mock import Mock
+        mock_response = Mock()  # Use regular Mock, not AsyncMock
+        # json() and raise_for_status() are NOT async in httpx
         mock_response.json.return_value = {
             "choices": [{"message": {"content": "This is a response"}}]
         }
-        mock_response.raise_for_status = AsyncMock()
+        mock_response.raise_for_status.return_value = None
         mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
         mock_client.__aexit__.return_value = AsyncMock()
@@ -105,6 +106,7 @@ async def test_api_key_not_exposed_in_response() -> None:
         response = await client.send_chat_request("Hello")
 
         # Verify API key not in response
+        assert response is not None, "Response should not be None"
         assert api_key not in response
         assert "sk-" not in response  # No API key prefix
 
