@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from openai import OpenAI
 
 from mongo.utils import get_mongo_base_url
-from utils.consts import BLOCKED_MESSAGE
+from utils.consts import BLOCKED_MESSAGE, BLOCK_COUNTER_THRESHOLD
 from utils.logging_config import configure_logging
 from utils.model_negotiator import pick_cheapest_supported_model
 from utils.schemas import ChatRequest, ChatResponse
@@ -51,34 +51,58 @@ def get_model_id():
 app = FastAPI()
 
 
-def _check_user_blocked(username) -> bool:
-    """
-    Best-effort check with the mongo service.
-    is logged but does not block the request if user is missing.
+def _check_user_blocked(username: str) -> bool:
+    """Best-effort check with the mongo service.
+
+    Any failure to talk to mongo or a missing user will be treated as
+    "not blocked". Only a valid response with a block_counter greater
+    than or equal to BLOCK_COUNTER_THRESHOLD will block the user.
     """
     mongo_base_url = get_mongo_base_url()
     if mongo_base_url is None:
-        logger.warning(f'mongo_lookup_skipped {username=}, reason=missing_env')
-        return
+        logger.warning('mongo_lookup_skipped username=%s reason=missing_env', username)
+        return False
 
     url = f'{mongo_base_url}/users/{username}'
     try:
         mongo_resp = requests.get(url, timeout=1.0)
-        if mongo_resp.status_code == 404:
-            logger.error(f'mongo_user_not_found {username=}')
-        elif mongo_resp.status_code >= 400:
-            logger.error(
-                'mongo_user_error username=%s status=%s',
-                username,
-                mongo_resp.status_code,
-            )
-        else:
-            # In the future we can inspect mongo_resp.json() for a `blocked` flag.
-            logger.info(f'mongo_user_ok {username=}')
-    except Exception as exc:
-        logger.error('mongo_lookup_failed id=%s username=%s error=%r', request_id, req.username, exc)
-    # TODO - actually extract from mongo_resp the blocked status and return it as a bool
-    return False
+    except Exception as exc:  # noqa: BLE001
+        logger.error('mongo_lookup_failed username=%s error=%r', username, exc)
+        return False
+
+    if mongo_resp.status_code == 404:
+        logger.error('mongo_user_not_found username=%s', username)
+        return False
+
+    if mongo_resp.status_code >= 400:
+        logger.error(
+            'mongo_user_error username=%s status=%s',
+            username,
+            mongo_resp.status_code,
+        )
+        return False
+
+    try:
+        data = mongo_resp.json()
+    except ValueError:
+        logger.error('mongo_user_bad_json username=%s', username)
+        return False
+
+    block_counter = data.get('block_counter', 0)
+    try:
+        counter_value = int(block_counter)
+    except (TypeError, ValueError) as e:
+        logger.error('mongo_user_bad_block_counter_value username=%s', username)
+        counter_value = 0
+
+    is_blocked = counter_value >= BLOCK_COUNTER_THRESHOLD
+    logger.info(
+        'mongo_user_status username=%s block_counter=%s blocked=%s',
+        username,
+        counter_value,
+        is_blocked,
+    )
+    return is_blocked
 
 
 def _get_usernames():
