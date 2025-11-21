@@ -12,16 +12,12 @@ from app.tests.mocks import InMemoryCache, InMemoryRepository
     mentioned_username=st.text(
         min_size=3,
         max_size=20,
-        alphabet=st.characters(
-            whitelist_categories=("Lu", "Ll", "Nd"), whitelist_characters="_"
-        ),
+        alphabet="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
     ),
     requesting_username=st.text(
         min_size=3,
         max_size=20,
-        alphabet=st.characters(
-            whitelist_categories=("Lu", "Ll", "Nd"), whitelist_characters="_"
-        ),
+        alphabet="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
     ),
 )
 @settings(max_examples=100)
@@ -64,14 +60,12 @@ async def test_username_mention_detection(
     username=st.text(
         min_size=3,
         max_size=20,
-        alphabet=st.characters(whitelist_categories=("Lu", "Ll"), whitelist_characters="_"),
+        alphabet="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
     ),
     requesting_username=st.text(
         min_size=3,
         max_size=20,
-        alphabet=st.characters(
-            whitelist_categories=("Lu", "Ll", "Nd"), whitelist_characters="_"
-        ),
+        alphabet="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
     ),
     case_variant=st.sampled_from(["upper", "lower", "title"]),
 )

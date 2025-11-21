@@ -121,23 +121,28 @@
   - **Property 14: Exact match only (no substring matching)**
   - **Validates: Requirements 3.5**
 
-- [-] 10. Implement OpenAI client
+- [x] 10. Implement OpenAI client
+
+
 
   - Create app/services/openai_client.py implementing OpenAIClient protocol
   - Implement send_chat_request() using httpx with proper authentication headers
   - Handle errors and timeouts
   - _Requirements: 2.1, 7.2, 7.3_
 
-- [-] 10.1 Write property test for API key usage
+- [x] 10.1 Write property test for API key usage
+
 
   - **Property 22: Single API key for all users**
   - **Validates: Requirements 7.2**
 
-- [ ] 10.2 Write property test for API key in headers
+- [x] 10.2 Write property test for API key in headers
+
   - **Property 23: API key in request headers**
   - **Validates: Requirements 7.3**
 
-- [ ] 10.3 Write property test for API key not exposed
+- [x] 10.3 Write property test for API key not exposed
+
   - **Property 24: API key not exposed**
   - **Validates: Requirements 7.4**
 
