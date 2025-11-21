@@ -239,7 +239,6 @@ class MockOpenAIClient(OpenAIClient):
 
 ```python
 from sqlmodel import SQLModel, Field
-from datetime import datetime
 
 class User(SQLModel, table=True):
     __tablename__ = "users"
@@ -247,8 +246,6 @@ class User(SQLModel, table=True):
     username: str = Field(primary_key=True, max_length=50)
     block_count: int = Field(default=0, ge=0, le=3)
     is_blocked: bool = Field(default=False)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
 ```
 
 **Database Schema (PostgreSQL):**
@@ -256,9 +253,7 @@ class User(SQLModel, table=True):
 CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
     block_count INTEGER NOT NULL DEFAULT 0 CHECK (block_count >= 0 AND block_count <= 3),
-    is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    is_blocked BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE INDEX idx_is_blocked ON users(is_blocked);
@@ -783,7 +778,7 @@ def detect_mentions(message: str, all_usernames: set[str], requesting_user: str)
 
 ```python
 class UsernameCache:
-    """Redis-backed username cache with invalidation"""
+    """Redis-backed username cache with simple invalidation"""
     
     CACHE_KEY = "usernames:all"
     
@@ -798,17 +793,17 @@ class UsernameCache:
         if cached:
             usernames = set(cached.split(","))
         else:
-            # Cache miss - query database
+            # Cache miss - query database and populate cache
             usernames = set(await self.db.get_all_usernames())
-            # Store in cache
-            await self.redis.set(self.CACHE_KEY, ",".join(usernames))
+            if usernames:
+                await self.redis.set(self.CACHE_KEY, ",".join(usernames))
         
         # Remove excluded username
         usernames.discard(exclude)
         return usernames
     
     async def invalidate(self):
-        """Invalidate cache when users are created"""
+        """Invalidate cache when users are created - simple deletion"""
         await self.redis.delete(self.CACHE_KEY)
 ```
 
@@ -883,7 +878,6 @@ async def increment_block_count_atomic(username: str):
         user.block_count += 1
         if user.block_count >= 3:
             user.is_blocked = True
-        user.updated_at = datetime.utcnow()
         await db.update_user(user)
         return user
 ```
