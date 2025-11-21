@@ -40,3 +40,12 @@ async def get_user_status(username: str) -> UserStatus:
     For now, it always raises a 404 to simulate "no such user".
     """
     raise HTTPException(status_code=404, detail='User not found')
+
+@app.get('/users', response_model=list[str])
+async def list_users() -> list[str]:
+    """Return the list of known usernames.
+
+    For now, we do not maintain a persistent user list yet, so this
+    returns an empty list as a placeholder.
+    """
+    return []
