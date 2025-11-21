@@ -164,28 +164,36 @@
   - **Validates: Requirements 3.2, 4.4**
 
 
+
 - [ ] 11.2 Write property test for blocking trigger
   - **Property 15: Block count of three triggers blocked status**
   - **Validates: Requirements 4.1**
 
-- [ ] 12. Implement chat service
+- [x] 12. Implement chat service
+
   - Create app/services/chat_service.py with ChatService class
   - Implement process_chat_request() orchestrating: lock acquisition, user check, moderation, OpenAI call
   - Handle auto-creation when enabled
+
   - Ensure violations don't prevent request processing
   - _Requirements: 2.1, 2.2, 2.6, 2.7, 3.2, 3.3_
+
 
 - [ ] 12.1 Write property test for non-blocked users
   - **Property 6: Non-blocked users can make chat requests**
   - **Validates: Requirements 2.1, 2.2**
 
+
 - [ ] 12.2 Write property test for blocked users
   - **Property 7: Blocked users are rejected**
+
   - **Validates: Requirements 2.3, 4.2, 4.3**
+
 
 - [ ] 12.3 Write property test for violations don't prevent processing
   - **Property 12: Violations don't prevent request processing**
   - **Validates: Requirements 3.3**
+
 
 - [ ] 12.4 Write property test for third violation behavior
   - **Property 16: Third violation request completes before blocking**
