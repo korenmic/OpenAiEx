@@ -149,6 +149,7 @@
 - [x] 11. Implement user service
 
 
+
   - Create app/services/user_service.py with UserService class
   - Implement create_user, get_user, get_all_users, get_all_usernames_except methods
   - Implement increment_block_count with atomic transaction and is_blocked update
@@ -156,9 +157,12 @@
   - _Requirements: 1.1, 1.2, 1.3, 2.6, 4.1, 4.4_
 
 
-- [ ] 11.1 Write property test for block count increment
+
+- [x] 11.1 Write property test for block count increment
+
   - **Property 11: Block count increments by one per request**
   - **Validates: Requirements 3.2, 4.4**
+
 
 - [ ] 11.2 Write property test for blocking trigger
   - **Property 15: Block count of three triggers blocked status**
