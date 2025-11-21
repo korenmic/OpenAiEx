@@ -25,9 +25,10 @@ async def test_single_api_key_for_all_users(messages: list[str]) -> None:
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
         mock_response = AsyncMock()
-        mock_response.json = AsyncMock(return_value={
+        # json() is NOT async in httpx, it's a regular method
+        mock_response.json.return_value = {
             "choices": [{"message": {"content": "Mock response"}}]
-        })
+        }
         mock_response.raise_for_status = AsyncMock()
         mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
@@ -60,9 +61,10 @@ async def test_api_key_in_request_headers(message: str, api_key: str) -> None:
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
         mock_response = AsyncMock()
-        mock_response.json = AsyncMock(return_value={
+        # json() is NOT async in httpx, it's a regular method
+        mock_response.json.return_value = {
             "choices": [{"message": {"content": "Mock response"}}]
-        })
+        }
         mock_response.raise_for_status = AsyncMock()
         mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
@@ -90,9 +92,10 @@ async def test_api_key_not_exposed_in_response() -> None:
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
         mock_response = AsyncMock()
-        mock_response.json = AsyncMock(return_value={
+        # json() is NOT async in httpx, it's a regular method
+        mock_response.json.return_value = {
             "choices": [{"message": {"content": "This is a response"}}]
-        })
+        }
         mock_response.raise_for_status = AsyncMock()
         mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
