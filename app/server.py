@@ -110,6 +110,11 @@ def _check_for_illegal_words(message: str, username: str) -> bool:
     return any(set(message.split()) & set(_users_except(username)))
 
 
+def _increase_block_counter(username: str) -> None:
+    # TODO - TBD
+    pass
+
+
 @app.post('/chat', response_model=ChatResponse)
 async def chat(req: ChatRequest) -> ChatResponse:
     """
@@ -128,7 +133,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
         return ChatResponse(model='', reply=BLOCKED_MESSAGE)
     illegal_words_found = _check_for_illegal_words(req.message, req.username)
     if illegal_words_found:
-        increase_block_counter(req.username)
+        _increase_block_counter(req.username)
 
     try:
         model_id = get_model_id()
