@@ -17,13 +17,15 @@
   - Add validation for required environment variables (OPENAI_API_KEY)
   - _Requirements: 7.1, 7.5, 1.7, 1.8_
 
-- [-] 3. Define data models using SQLModel
+- [x] 3. Define data models using SQLModel
+
 
   - Create app/models/user.py with User model (username, block_count, is_blocked)
   - Add Pydantic models for requests/responses (CreateUserRequest, UserResponse, ChatRequest, ChatResponse)
   - _Requirements: 1.1, 1.4_
 
-- [ ] 4. Create abstraction layer protocols
+- [-] 4. Create abstraction layer protocols
+
   - Create app/core/protocols.py with DatabaseRepository, CacheClient, LockManager, OpenAIClient protocols
   - Define all interface methods with type hints
   - _Requirements: 9.1, 9.4_
