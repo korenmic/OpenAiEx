@@ -120,12 +120,12 @@ async def test_api_key_not_exposed_in_error() -> None:
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
-        mock_response = AsyncMock()
+        mock_response = Mock()  # Use regular Mock, not AsyncMock
         mock_response.status_code = 401
         mock_response.raise_for_status.side_effect = Exception("HTTP 401")
-        mock_client.post.return_value = mock_response
+        mock_client.post = AsyncMock(return_value=mock_response)
         mock_client.__aenter__.return_value = mock_client
-        mock_client.__aexit__.return_value = None
+        mock_client.__aexit__.return_value = AsyncMock()
         mock_client_class.return_value = mock_client
 
         try:
