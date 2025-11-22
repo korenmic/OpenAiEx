@@ -58,3 +58,33 @@ class UserService:
         if user:
             return user
         return await self.create_user(username)
+
+    async def unblock_user(self, username: str) -> User:
+        """Unblock a user by resetting block_count and is_blocked status.
+        
+        Args:
+            username: Username to unblock
+            
+        Returns:
+            Updated user object
+            
+        Raises:
+            ValueError: If user doesn't exist or is not currently blocked
+        """
+        user = await self.db.get_user(username)
+        if not user:
+            raise ValueError(f"User not found: {username}")
+        
+        if not user.is_blocked:
+            raise ValueError(f"User is not currently blocked: {username}")
+        
+        # Reset block status
+        user.block_count = 0
+        user.is_blocked = False
+        
+        updated_user = await self.db.update_user(user)
+        
+        # Invalidate cache since user list changed (unblocked user)
+        await self.username_cache.invalidate()
+        
+        return updated_user

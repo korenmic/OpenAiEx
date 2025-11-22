@@ -62,3 +62,36 @@ async def list_users(
             for u in users
         ]
     }
+
+
+@router.post("/users/{username}/unblock", response_model=UserResponse)
+async def unblock_user(
+    username: str,
+    user_service: UserService = Depends(get_user_service),
+    admin_key: str = Depends(verify_admin_key),
+) -> UserResponse:
+    """Unblock a user by resetting their block count and status (admin only).
+    
+    Args:
+        username: Username to unblock
+        
+    Returns:
+        Updated user information
+        
+    Raises:
+        404: User not found
+        400: User is not currently blocked
+    """
+    try:
+        user = await user_service.unblock_user(username)
+        return UserResponse(
+            username=user.username, block_count=user.block_count, is_blocked=user.is_blocked
+        )
+    except ValueError as e:
+        if "not found" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
+            )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)
+        )
