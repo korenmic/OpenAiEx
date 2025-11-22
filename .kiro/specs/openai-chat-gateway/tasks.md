@@ -182,21 +182,21 @@
 
 
 
-- [ ] 12.1 Write property test for non-blocked users
+- [x] 12.1 Write property test for non-blocked users
   - **Property 6: Non-blocked users can make chat requests**
   - **Validates: Requirements 2.1, 2.2**
 
 
 
-- [ ] 12.2 Write property test for blocked users
+- [x] 12.2 Write property test for blocked users
   - **Property 7: Blocked users are rejected**
 
 
   - **Validates: Requirements 2.3, 4.2, 4.3**
 
 
-- [ ] 12.3 Write property test for violations don't prevent processing
-  - **Property 12: Violations don't prevent request processing**
+- [x] 12.3 Write property test for violations don't prevent processing
+  - **Property 12: Violations don't prevent processing**
 
   - **Validates: Requirements 3.3**
 
@@ -209,7 +209,7 @@
 
 
 
-- [ ] 12.5 Write property test for OpenAI error propagation
+- [x] 12.5 Write property test for OpenAI error propagation
   - **Property 9: OpenAI errors are propagated**
   - **Validates: Requirements 2.5, 6.1**
 
@@ -247,7 +247,7 @@
 
 
 
-- [ ] 16. Implement admin user management endpoints
+- [x] 16. Implement admin user management endpoints
   - Create app/api/admin.py with admin router
   - Implement POST /admin/users (create user)
   - Implement GET /admin/users/{username} (get user)
@@ -258,7 +258,7 @@
   - _Requirements: 1.1, 1.2, 1.3, 1.5, 1.6_
 
 
-- [ ] 16.1 Write property test for correct status codes
+- [x] 16.1 Write property test for correct status codes
   - **Property 17: Correct HTTP status codes for success**
   - **Validates: Requirements 5.1, 5.2, 5.3**
 
@@ -269,13 +269,13 @@
   - **Property 18: 404 for non-existent resources**
   - **Validates: Requirements 5.4**
 
-- [ ] 16.3 Write property test for 400 errors
+- [x] 16.3 Write property test for 400 errors
   - **Property 19: 400 for invalid input**
   - **Validates: Requirements 5.5, 6.4**
 
 
 
-- [ ] 17. Implement public chat endpoint
+- [x] 17. Implement public chat endpoint
   - Create app/api/chat.py with chat router
   - Implement POST /chat endpoint
 
@@ -306,23 +306,23 @@
   - Handle SIGTERM for graceful shutdown
   - _Requirements: 7.5, 8.3, 8.4_
 
-- [ ] 20. Implement structured JSON logging
+- [x] 20. Implement structured JSON logging
   - Create app/core/logging.py with JSONFormatter
   - Configure logging with request IDs and context
   - Ensure API keys are never logged (redaction)
   - _Requirements: 7.4, 8.7_
 
-- [ ] 20.1 Write property test for internal errors
+- [x] 20.1 Write property test for internal errors
   - **Property 20: Internal errors return 500**
   - **Validates: Requirements 6.2**
 
-- [ ] 21. Implement exception handlers
+- [x] 21. Implement exception handlers
   - Create app/core/exceptions.py with custom exception classes
   - Add FastAPI exception handlers for custom exceptions
   - Map exceptions to appropriate HTTP status codes
   - _Requirements: 5.4, 5.5, 6.1, 6.2_
 
-- [ ] 22. Create unit test fixtures and configuration
+- [x] 22. Create unit test fixtures and configuration
   - Create tests/unit/conftest.py with test app fixture using mocks
   - Override all dependencies with in-memory implementations
   - _Requirements: 9.1, 9.4_
