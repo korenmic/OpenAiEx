@@ -11,6 +11,7 @@ from app.services.content_moderator import ContentModerator
 from app.services.openai_client import OpenAIHttpClient
 from app.services.user_service import UserService
 from app.services.username_cache import UsernameCache
+from app.services.model_selector import ModelSelector, ModelPreference
 
 
 # Singletons for production dependencies
@@ -18,6 +19,7 @@ _db_repository: DatabaseRepository | None = None
 _cache_client: CacheClient | None = None
 _lock_manager: LockManager | None = None
 _openai_client: OpenAIClient | None = None
+_selected_model: str | None = None
 
 
 async def get_db() -> DatabaseRepository:
@@ -50,12 +52,37 @@ async def get_lock_manager() -> LockManager:
     return _lock_manager
 
 
+async def get_selected_model() -> str:
+    """Get the selected model (cached after first selection)."""
+    global _selected_model
+    if _selected_model is None:
+        settings = get_settings()
+        
+        # If model explicitly set, use it
+        if settings.openai_model:
+            _selected_model = settings.openai_model
+        else:
+            # Auto-select based on preference
+            try:
+                preference = ModelPreference(settings.model_preference.upper())
+            except ValueError:
+                preference = ModelPreference.CHEAPEST
+            
+            selector = ModelSelector(settings.openai_api_key, preference)
+            _selected_model = await selector.select_best_model()
+            print(f"Auto-selected model: {_selected_model} (preference: {preference.value})")
+    
+    return _selected_model
+
+
 def get_openai_client() -> OpenAIClient:
     """Get OpenAI client dependency."""
     global _openai_client
     if _openai_client is None:
         settings = get_settings()
-        _openai_client = OpenAIHttpClient(settings.openai_api_key, settings.openai_model)
+        # Model will be set during app startup
+        model = _selected_model or "gpt-3.5-turbo"
+        _openai_client = OpenAIHttpClient(settings.openai_api_key, model)
     return _openai_client
 
 

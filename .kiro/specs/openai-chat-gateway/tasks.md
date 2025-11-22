@@ -343,6 +343,8 @@
 
 - [x] 24. Create end-to-end test fixtures and configuration
 
+
+
   - Create tests/e2e/conftest.py with real server startup
   - Start PostgreSQL, Redis, and FastAPI server as subprocesses
   - Provide httpx.AsyncClient for HTTP requests

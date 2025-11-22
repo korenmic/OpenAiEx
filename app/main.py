@@ -32,7 +32,12 @@ async def lifespan(app: FastAPI):
     
     logger.info("Application starting...")
     logger.info(f"Auto-create users: {settings.auto_create_users}")
-    logger.info(f"OpenAI model: {settings.openai_model}")
+    logger.info(f"Model preference: {settings.model_preference}")
+    
+    # Select best OpenAI model at startup
+    from app.core.dependencies import get_selected_model
+    selected_model = await get_selected_model()
+    logger.info(f"Selected OpenAI model: {selected_model}")
     
     # Initialize database and cache (lazy initialization in dependencies)
     logger.info("Application started successfully")

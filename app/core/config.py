@@ -14,7 +14,8 @@ class Settings(BaseSettings):
     openai_api_key: str
 
     # Optional with defaults
-    openai_model: str = "gpt-3.5-turbo"
+    openai_model: Optional[str] = None  # Auto-selected if not provided
+    model_preference: str = "CHEAPEST"  # FASTEST or CHEAPEST
     database_url: str = "postgresql+asyncpg://localhost:5432/gateway"
     redis_url: str = "redis://localhost:6379"
     auto_create_users: bool = True

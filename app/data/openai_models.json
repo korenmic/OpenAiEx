@@ -1,0 +1,64 @@
+{
+  "models": {
+    "gpt-4o": {
+      "input_price_per_1m": 2.50,
+      "output_price_per_1m": 10.00,
+      "model_type": "text",
+      "is_fast": false
+    },
+    "gpt-4o-mini": {
+      "input_price_per_1m": 0.150,
+      "output_price_per_1m": 0.600,
+      "model_type": "text",
+      "is_fast": true
+    },
+    "gpt-4-turbo": {
+      "input_price_per_1m": 10.00,
+      "output_price_per_1m": 30.00,
+      "model_type": "text",
+      "is_fast": true
+    },
+    "gpt-4": {
+      "input_price_per_1m": 30.00,
+      "output_price_per_1m": 60.00,
+      "model_type": "text",
+      "is_fast": false
+    },
+    "gpt-3.5-turbo": {
+      "input_price_per_1m": 0.50,
+      "output_price_per_1m": 1.50,
+      "model_type": "text",
+      "is_fast": true
+    },
+    "gpt-3.5-turbo-16k": {
+      "input_price_per_1m": 3.00,
+      "output_price_per_1m": 4.00,
+      "model_type": "text",
+      "is_fast": true
+    },
+    "o1-preview": {
+      "input_price_per_1m": 15.00,
+      "output_price_per_1m": 60.00,
+      "model_type": "text",
+      "is_fast": false
+    },
+    "o1-mini": {
+      "input_price_per_1m": 3.00,
+      "output_price_per_1m": 12.00,
+      "model_type": "text",
+      "is_fast": true
+    },
+    "o3-mini": {
+      "input_price_per_1m": 1.10,
+      "output_price_per_1m": 4.40,
+      "model_type": "text",
+      "is_fast": true
+    },
+    "chatgpt-4o-latest": {
+      "input_price_per_1m": 5.00,
+      "output_price_per_1m": 15.00,
+      "model_type": "text",
+      "is_fast": false
+    }
+  }
+}
