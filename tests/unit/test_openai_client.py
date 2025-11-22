@@ -20,7 +20,7 @@ from app.services.openai_client import OpenAIHttpClient
 async def test_single_api_key_for_all_users(messages: list[str]) -> None:
     """For any set of chat requests, all should use the same configured API key."""
     api_key = "test-api-key-12345"
-    client = OpenAIHttpClient(api_key=api_key)
+    client = OpenAIHttpClient(api_key=api_key, model="gpt-3.5-turbo")
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
@@ -56,7 +56,7 @@ async def test_single_api_key_for_all_users(messages: list[str]) -> None:
 @pytest.mark.unit
 async def test_api_key_in_request_headers(message: str, api_key: str) -> None:
     """For any request to OpenAI, headers should include Authorization with Bearer token."""
-    client = OpenAIHttpClient(api_key=api_key)
+    client = OpenAIHttpClient(api_key=api_key, model="gpt-3.5-turbo")
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
@@ -87,7 +87,7 @@ async def test_api_key_in_request_headers(message: str, api_key: str) -> None:
 async def test_api_key_not_exposed_in_response() -> None:
     """API key should not appear in any response or error message."""
     api_key = "sk-secret-key-12345"
-    client = OpenAIHttpClient(api_key=api_key)
+    client = OpenAIHttpClient(api_key=api_key, model="gpt-3.5-turbo")
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
@@ -116,7 +116,7 @@ async def test_api_key_not_exposed_in_response() -> None:
 async def test_api_key_not_exposed_in_error() -> None:
     """API key should not appear in error messages."""
     api_key = "sk-secret-key-12345"
-    client = OpenAIHttpClient(api_key=api_key)
+    client = OpenAIHttpClient(api_key=api_key, model="gpt-3.5-turbo")
 
     with patch("httpx.AsyncClient") as mock_client_class:
         mock_client = AsyncMock()
