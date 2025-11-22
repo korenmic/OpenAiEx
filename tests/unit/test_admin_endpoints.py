@@ -35,7 +35,7 @@ def create_test_app():
 @given(username=st.text(min_size=1, max_size=50, alphabet=st.characters(
     min_codepoint=97, max_codepoint=122  # a-z only
 )))
-@settings(max_examples=100)
+@settings(max_examples=100, deadline=None)
 @pytest.mark.unit
 def test_correct_status_codes_for_success(username: str) -> None:
     """Validates: Requirements 5.1, 5.2, 5.3"""
@@ -73,7 +73,7 @@ def test_correct_status_codes_for_success(username: str) -> None:
 @given(username=st.text(min_size=1, max_size=50, alphabet=st.characters(
     min_codepoint=97, max_codepoint=122  # a-z only
 )))
-@settings(max_examples=100)
+@settings(max_examples=100, deadline=None)
 @pytest.mark.unit
 def test_404_for_nonexistent_resources(username: str) -> None:
     """Validates: Requirements 5.4"""

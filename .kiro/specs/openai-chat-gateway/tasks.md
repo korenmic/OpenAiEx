@@ -295,6 +295,7 @@
 
 
 
+
 - [x] 19. Implement application lifecycle management
 
 
@@ -340,10 +341,15 @@
   - Handle cleanup on teardown
   - _Requirements: 9.3, 9.6_
 
+
+
 - [ ] 24.1 Write E2E test for auto-creation
   - Test with AUTO_CREATE_USERS=true creates user on first chat
   - Test with AUTO_CREATE_USERS=false returns 404 for non-existent user
   - _Requirements: 2.6, 2.7, 9.8_
+
+
+
 
 - [ ] 24.2 Write E2E test for per-user serialization with delays
   - Send 2 concurrent requests from same user with artificial delays
