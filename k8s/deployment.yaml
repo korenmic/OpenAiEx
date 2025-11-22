@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openai-gateway
+  labels:
+    app: openai-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: openai-gateway
+  template:
+    metadata:
+      labels:
+        app: openai-gateway
+    spec:
+      containers:
+      - name: gateway
+        image: openai-gateway:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gateway-secrets
+              key: openai-api-key
+        - name: ADMIN_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gateway-secrets
+              key: admin-api-key
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://postgres:5432/gateway"
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: AUTO_CREATE_USERS
+          value: "true"
+        - name: OPENAI_MODEL
+          value: "gpt-3.5-turbo"
+        - name: LOG_LEVEL
+          value: "INFO"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
