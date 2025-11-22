@@ -26,6 +26,6 @@ jobs:
       - name: Run pylint (errors only)
         working-directory: "."
         run: |
-          pylint --errors-only *.py
-          # or recursively:
-          # pylint --errors-only $(find . -name '*.py' -print)
+          export PYTHONPATH=$PWD
+          pylint --errors-only app/ tests/
+          # Lint specific directories instead of *.py to avoid issues
