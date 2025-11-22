@@ -4,8 +4,8 @@ uvicorn[standard]==0.24.0
 
 # Database & ORM
 sqlmodel==0.0.14
-# asyncpg==0.29.0  # Requires C++ build tools on Windows, skip for now
-# psycopg2-binary not needed for asyncpg
+psycopg[binary]==3.1.13
+psycopg2-binary==2.9.9
 
 # Cache & Locks
 redis==5.0.1
