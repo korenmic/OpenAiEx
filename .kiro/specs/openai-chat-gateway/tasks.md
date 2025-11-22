@@ -367,36 +367,42 @@
 
 
 
-- [ ] 24.2 Write E2E test for per-user serialization with delays
+- [x] 24.2 Write E2E test for per-user serialization with delays
+
   - Send 2 concurrent requests from same user with artificial delays
   - Verify requests are processed serially (second waits for first)
   - Send concurrent requests from different users
   - Verify they process in parallel
   - _Requirements: 4.6, 4.7, 4.8, 9.9, 9.10_
 
-- [ ] 25. Create Dockerfile for containerization
+
+- [x] 25. Create Dockerfile for containerization
   - Create Dockerfile with Python 3.9 base image
   - Multi-stage build for smaller image size
   - Run as non-root user
   - Add health check
   - _Requirements: 8.4_
 
-- [ ] 26. Create Kubernetes deployment manifests
+
+- [x] 26. Create Kubernetes deployment manifests
   - Create k8s/deployment.yaml with deployment configuration
   - Configure replicas, resource limits, health probes
   - Create k8s/service.yaml for load balancing
   - Create k8s/secrets.yaml.example for secrets
+
   - _Requirements: 8.1, 8.2, 8.3, 8.8_
 
-- [ ] 27. Create documentation
+- [x] 27. Create documentation
   - Create README.md with project overview, setup instructions, API documentation
   - Document environment variables
   - Document local development setup (WSL)
   - Document Kubernetes deployment
+
   - Document testing strategy (unit, integration, E2E)
   - _Requirements: 8.4_
 
-- [ ] 28. Final checkpoint - Ensure all tests pass
+- [x] 28. Final checkpoint - Ensure all tests pass
+
   - Run all unit tests: pytest tests/unit/
   - Run all integration tests: pytest tests/integration/
   - Run all E2E tests: pytest tests/e2e/
