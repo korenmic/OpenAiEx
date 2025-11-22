@@ -329,7 +329,9 @@
 
 
 
-- [ ] 23. Create integration test fixtures and configuration
+- [x] 23. Create integration test fixtures and configuration
+
+
   - Create tests/integration/conftest.py with PostgreSQL and Redis setup
   - Start services if not running
   - Create test database
@@ -338,7 +340,9 @@
   - Override only OpenAI client with mock
   - _Requirements: 9.2, 9.5_
 
-- [ ] 24. Create end-to-end test fixtures and configuration
+
+- [x] 24. Create end-to-end test fixtures and configuration
+
   - Create tests/e2e/conftest.py with real server startup
   - Start PostgreSQL, Redis, and FastAPI server as subprocesses
   - Provide httpx.AsyncClient for HTTP requests
@@ -349,9 +353,14 @@
 
 - [x] 24.1 Write E2E test for auto-creation
 
+
+
+
   - Test with AUTO_CREATE_USERS=true creates user on first chat
   - Test with AUTO_CREATE_USERS=false returns 404 for non-existent user
   - _Requirements: 2.6, 2.7, 9.8_
+
+
 
 
 
