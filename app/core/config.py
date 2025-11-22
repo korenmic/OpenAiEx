@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379"
     auto_create_users: bool = True
     admin_api_key: Optional[str] = None
+    block_duration_hours: int = 24  # Hours until automatic unblock
 
     # Logging
     log_level: str = "INFO"

@@ -1,4 +1,7 @@
 """User data model."""
+from datetime import datetime
+from typing import Optional
+
 from sqlmodel import Field, SQLModel
 from pydantic import BaseModel, field_validator
 
@@ -11,6 +14,7 @@ class User(SQLModel, table=True):
     username: str = Field(primary_key=True, max_length=50, min_length=1)
     block_count: int = Field(default=0, ge=0, le=3)
     is_blocked: bool = Field(default=False)
+    blocked_at: Optional[datetime] = Field(default=None, nullable=True)
 
 
 class CreateUserRequest(BaseModel):
