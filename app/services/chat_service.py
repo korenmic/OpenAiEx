@@ -1,4 +1,6 @@
 """Chat service for orchestrating chat requests."""
+from datetime import datetime, timedelta, timezone
+
 from app.core.config import get_settings
 from app.core.protocols import LockManager, OpenAIClient
 from app.models.user import ChatResponse
@@ -46,9 +48,22 @@ class ChatService:
                 if not user:
                     raise ValueError(f"User not found: {username}")
 
-            # Check if blocked
+            # Check if blocked and auto-unblock if duration expired
             if user.is_blocked:
-                raise PermissionError(f"User is blocked and cannot make requests")
+                if user.blocked_at:
+                    # Check if block duration has expired
+                    block_expiry = user.blocked_at + timedelta(hours=self.settings.block_duration_hours)
+                    now = datetime.now(timezone.utc)
+                    
+                    if now >= block_expiry:
+                        # Automatically unblock user
+                        user = await self.user_service.unblock_user(username)
+                        # Continue processing request
+                    else:
+                        raise PermissionError(f"User is blocked and cannot make requests")
+                else:
+                    # Blocked but no timestamp (legacy data), still block
+                    raise PermissionError(f"User is blocked and cannot make requests")
 
             # Content moderation check
             violations = await self.content_moderator.check_for_violations(message, username)

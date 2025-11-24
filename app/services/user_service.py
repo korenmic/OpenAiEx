@@ -1,4 +1,5 @@
 """User service for managing user operations."""
+from datetime import datetime, timezone
 from typing import List, Optional, Set
 
 from app.core.protocols import DatabaseRepository
@@ -42,6 +43,7 @@ class UserService:
         user.block_count += 1
         if user.block_count >= 3:
             user.is_blocked = True
+            user.blocked_at = datetime.now(timezone.utc)
 
         return await self.db.update_user(user)
 
@@ -58,3 +60,34 @@ class UserService:
         if user:
             return user
         return await self.create_user(username)
+
+    async def unblock_user(self, username: str) -> User:
+        """Unblock a user by resetting block_count, is_blocked, and blocked_at.
+        
+        Args:
+            username: Username to unblock
+            
+        Returns:
+            Updated user object
+            
+        Raises:
+            ValueError: If user doesn't exist or is not currently blocked
+        """
+        user = await self.db.get_user(username)
+        if not user:
+            raise ValueError(f"User not found: {username}")
+        
+        if not user.is_blocked:
+            raise ValueError(f"User is not currently blocked: {username}")
+        
+        # Reset block status
+        user.block_count = 0
+        user.is_blocked = False
+        user.blocked_at = None
+        
+        updated_user = await self.db.update_user(user)
+        
+        # Invalidate cache since user list changed (unblocked user)
+        await self.username_cache.invalidate()
+        
+        return updated_user
